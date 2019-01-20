@@ -11,7 +11,7 @@
  * Text Domain:  projmmp
  */
 
-defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
+ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 # Register CPTs (Archetypes)
 add_action( 'init', 'pmmp_register_cpts' );
@@ -20,8 +20,20 @@ function pmmp_register_cpts() {
 	 * Post Type: Archetypes.
 	 */
 	$labels = array(
-		"name" => __( "Archetypes", "projmmp" ),
+		"name"          => __( "Archetypes", "projmmp" ),
 		"singular_name" => __( "Archetype", "projmmp" ),
+		"edit_item"     => __( "Add New Archetype", "projmmp" ),
+		"new_item"      => __( "New Archetype", "projmmp" ),
+		"view_item"     => __( "View Archetype", "projmmp" ),
+		"view_items"    => __( "View Archetypes", "projmmp" ),
+		"search_items"  => __( "Search Archetypes", "projmmp" ),
+		"not_found"     => __( "No Archetypes found", "projmmp" ),
+		"not_found_in_trash"  => __( "No Archetypes found in Trash", "projmmp" ),
+		"all_items" => __( "All Archetypes", "projmmp" ),
+		"archives" => __( "Archetype Archives", "projmmp" ),
+		"attributes" => __( "Archetype Attributes", "projmmp" ),
+		"insert_into_item" => __( "Insert into Archetype", "projmmp" ),
+		"uploaded_to_this_item" => __( "Uploaded to this Archetype", "projmmp" ),
 	);
 	$args = array(
 		"label" => __( "Archetypes", "projmmp" ),

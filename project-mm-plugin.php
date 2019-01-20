@@ -39,6 +39,7 @@ function pmmp_register_cpts() {
 		"rest_controller_class" => "WP_REST_Posts_Controller",
 		"has_archive" => false,
 		"show_in_menu" => true,
+		"menu_icon" => 'dashicons-visibility',
 		"show_in_nav_menus" => true,
 		"exclude_from_search" => false,
 		"capability_type" => "post",

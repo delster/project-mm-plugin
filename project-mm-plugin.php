@@ -1,3 +1,5 @@
+<?php
+
 /*
  * Plugin Name:  Project MM Plugin
  * Plugin URI:   https://github.com/delster/project-mm-plugin

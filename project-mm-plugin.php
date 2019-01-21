@@ -1,5 +1,4 @@
 <?php
-
 /*
  * Plugin Name:  Project MM Plugin
  * Plugin URI:   https://github.com/delster/project-mm-plugin
@@ -10,28 +9,7 @@
  * License:      MIT
  * Text Domain:  projmmp
  */
-
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
-
-# Expose Archetypes ACF Fields to GraphQL
-add_action( 'graphql_register_types', function() {
-	register_graphql_field( 'Archetype', 'related_posts', [
-		 'type' => 'Array',
-		 'description' => __( 'The related posts for this archetype.', 'projmmp' ),
-		 'resolve' => function( $archetype ) {
-			 $posts = get_post_meta( $archetype->ID, 'related_posts', true );
-			 return ! empty( $posts ) ? $posts : [];
-		 }
-	]);
-	register_graphql_field( 'Archetype', 'related_users', [
-		 'type' => 'Array',
-		 'description' => __( 'The related users for this archetype.', 'projmmp' ),
-		 'resolve' => function( $archetype ) {
-			 $users = get_post_meta( $archetype->ID, 'related_users', true );
-			 return ! empty( $users ) ? $users : [];
-		 }
-	]);
-});
 
 # Register CPTs (Archetypes)
 add_action( 'init', 'pmmp_register_cpts' );
@@ -83,3 +61,34 @@ function pmmp_register_cpts() {
 	);
 	register_post_type( "archetype", $args );
 }
+
+# Expose Archetypes ACF Fields to GraphQL
+add_action( 'graphql_archetype_fields', function( $fields ) {
+	$fields['related_posts'] = [
+		'type'    => \WPGraphQL\Types::list_of(\WPGraphQL\Types::post_object('post')),
+		'resolve' => function( \WP_Post $post ) {
+			$arr = array();
+			$rposts = get_post_meta( $post->ID, 'related_posts', true );
+			foreach ($rposts as $rpost) {
+				$post = get_post( $rpost );
+				array_push($arr, $post);
+			}
+			return $arr!==null?$arr:null;
+		},
+	];
+
+	$fields['related_users'] = [
+		'type'    => \WPGraphQL\Types::list_of(\WPGraphQL\Types::user()),
+		'resolve' => function( \WP_Post $post ) {
+			$arr = array();
+			$rusers = get_post_meta( $post->ID, 'related_users', true );
+			foreach ($rusers as $ruser) {
+				$user = get_post( $ruser );
+				array_push($arr, $user);
+			}
+			return $arr!==null?$arr:null;
+		},
+	];
+
+	return $fields;
+});

@@ -11,7 +11,27 @@
  * Text Domain:  projmmp
  */
 
- defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
+defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
+
+# Expose Archetypes ACF Fields to GraphQL
+add_action( 'graphql_register_types', function() {
+	register_graphql_field( 'Archetype', 'related_posts', [
+		 'type' => 'Array',
+		 'description' => __( 'The related posts for this archetype.', 'projmmp' ),
+		 'resolve' => function( $archetype ) {
+			 $posts = get_post_meta( $archetype->ID, 'related_posts', true );
+			 return ! empty( $posts ) ? $posts : [];
+		 }
+	]);
+	register_graphql_field( 'Archetype', 'related_users', [
+		 'type' => 'Array',
+		 'description' => __( 'The related users for this archetype.', 'projmmp' ),
+		 'resolve' => function( $archetype ) {
+			 $users = get_post_meta( $archetype->ID, 'related_users', true );
+			 return ! empty( $users ) ? $users : [];
+		 }
+	]);
+});
 
 # Register CPTs (Archetypes)
 add_action( 'init', 'pmmp_register_cpts' );

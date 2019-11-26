@@ -57,7 +57,7 @@ function register_meanings_cpt() {
     "show_ui"               => true,
     "delete_with_user"      => false,
     "show_in_rest"          => true,
-    "rest_base"             => "",
+    "rest_base"             => "meaning",
     "rest_controller_class" => "WP_REST_Posts_Controller",
     "has_archive"           => false,
     "show_in_menu"          => true,
@@ -75,3 +75,13 @@ function register_meanings_cpt() {
   register_post_type( "meaning", $args );
 }
 add_action( 'init', 'register_meanings_cpt' );
+
+
+# Filter empty ACF fields to return `null` instead to prevent GraphQL issues.
+if (!function_exists('acf_nullify_empty')) {
+  function acf_nullify_empty($value, $post_id, $field) {
+    if (empty($value)) { return null; }
+    return $value;
+  }
+}
+add_filter('acf/format_value', 'acf_nullify_empty', 100, 3);
